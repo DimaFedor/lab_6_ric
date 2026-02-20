@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Header from "./components/Header";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import MovieDetails from "./pages/MovieDetails";
@@ -10,21 +11,7 @@ import NotFound from "./pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
-      <header className="topbar">
-        <div className="brand">MovieShelf</div>
-        <nav className="nav">
-          <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>
-            Головна
-          </NavLink>
-          <NavLink to="/movies" className={({ isActive }) => isActive ? "active" : ""}>
-            Каталог
-          </NavLink>
-          <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
-            Про застосунок
-          </NavLink>
-        </nav>
-      </header>
-
+      <Header />
       <main className="container">
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,23 +1,23 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { movies as data } from "../data/movies";
+import { movies as moviesData } from "../data/movies";
 
 export default function Movies() {
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("All");
 
-  const genres = useMemo(() => {
-    const set = new Set(data.map(m => m.genre));
-    return ["All", ...Array.from(set)];
+  const availableGenres = useMemo(() => {
+    const uniqueGenres = new Set(moviesData.map(movie => movie.genre));
+    return ["All", ...Array.from(uniqueGenres)];
   }, []);
 
-  const filtered = useMemo(() => {
-    return data.filter(m => {
-      const byTitle = m.title.toLowerCase().includes(query.trim().toLowerCase());
-      const byGenre = genre === "All" ? true : m.genre === genre;
-      return byTitle && byGenre;
+  const filteredMovies = useMemo(() => {
+    return moviesData.filter(movie => {
+      const matchesTitle = movie.title.toLowerCase().includes(searchQuery.trim().toLowerCase());
+      const matchesGenre = selectedGenre === "All" ? true : movie.genre === selectedGenre;
+      return matchesTitle && matchesGenre;
     });
-  }, [query, genre]);
+  }, [searchQuery, selectedGenre]);
 
   return (
     <div>
@@ -27,24 +27,26 @@ export default function Movies() {
         <div className="row">
           <input
             placeholder="Пошук за назвою..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          <select value={genre} onChange={(e) => setGenre(e.target.value)}>
-            {genres.map(g => <option key={g} value={g}>{g}</option>)}
+          <select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)}>
+            {availableGenres.map(genreOption => (
+              <option key={genreOption} value={genreOption}>{genreOption}</option>
+            ))}
           </select>
         </div>
 
-        <p className="muted">Знайдено: {filtered.length}</p>
+        <p className="muted">Знайдено: {filteredMovies.length}</p>
       </div>
 
       <div className="grid">
-        {filtered.map(m => (
-          <div key={m.id} className="card">
-            <h2>{m.title}</h2>
-            <p className="muted">{m.genre} • {m.year} • {m.rating}</p>
-            <Link className="btn" to={`/movies/${m.id}`}>Деталі</Link>
+        {filteredMovies.map(movie => (
+          <div key={movie.id} className="card">
+            <h2>{movie.title}</h2>
+            <p className="muted">{movie.genre} • {movie.year} • {movie.rating}</p>
+            <Link className="btn" to={`/movies/${movie.id}`}>Деталі</Link>
           </div>
         ))}
       </div>

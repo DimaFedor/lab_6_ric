@@ -3,8 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { movies } from "../data/movies";
 
 export default function MovieDetails() {
-  const { id } = useParams();
-  const movie = movies.find(m => m.id === id);
+  const { id: movieId } = useParams();
+  const movie = movies.find(movie => movie.id === movieId);
 
   if (!movie) {
     return (
